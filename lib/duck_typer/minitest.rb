@@ -8,7 +8,7 @@ module DuckTyper
       checker = BulkInterfaceChecker
         .new(objects, type:, partial_interface_methods: methods)
 
-      checker.call do |_, _, result|
+      checker.call do |result|
         assert result.match?, result.failure_message
       end
     end
