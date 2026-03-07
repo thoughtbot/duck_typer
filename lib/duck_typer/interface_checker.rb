@@ -62,8 +62,8 @@ module DuckTyper
 
     def diff_message(left, right, diff)
       methods = diff.map(&:first).uniq
-      left_params = params_for_comparison(left, NullParamsNormalizer).to_h.slice(*methods)
-      right_params = params_for_comparison(right, NullParamsNormalizer).to_h.slice(*methods)
+      left_params = params_for_comparison(left, NullParamsNormalizer)
+      right_params = params_for_comparison(right, NullParamsNormalizer)
 
       methods.map do |method_name|
         <<~DIFF
@@ -73,12 +73,13 @@ module DuckTyper
       end.join("\n")
     end
 
-    def join_signature(object, method_name, params)
+    def join_signature(object, method_name, all_params)
       inspector = @inspectors[object]
       display_name = inspector.display_name_for(method_name)
+      method_params = all_params.assoc(method_name)&.last
 
-      signature = if params[method_name]
-        "#{display_name}(#{params[method_name].join(", ")})"
+      signature = if method_params
+        "#{display_name}(#{method_params.join(", ")})"
       else
         "#{display_name} not defined"
       end
