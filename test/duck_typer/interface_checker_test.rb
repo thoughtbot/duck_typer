@@ -119,8 +119,8 @@ class InterfaceCheckerTest < Minitest::Test
   end
 
   def test_mixed_args_match_regardless_of_keyword_order
-    left = Class.new { def foo(a, b:, c: nil, &blk) = nil }
-    right = Class.new { def foo(x, c: nil, b:, &block) = nil }
+    left = Class.new { def foo(a, b:, c:, d: nil, &blk) = nil }
+    right = Class.new { def foo(x, c:, b:, d: nil, &block) = nil }
 
     assert match?(left, right)
   end
