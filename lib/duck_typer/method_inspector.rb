@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module DuckTyper
-  module MethodInspector
+  module MethodInspector # :nodoc:
     TYPES = %i[instance_methods class_methods].freeze
 
     def self.for(object, type)

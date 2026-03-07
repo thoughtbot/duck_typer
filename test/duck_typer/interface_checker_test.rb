@@ -439,6 +439,15 @@ class InterfaceCheckerTest < Minitest::Test
     assert_includes message, "foo()"
   end
 
+  def test_failure_message_shows_each_differing_method_once
+    left = Class.new { def foo(a) = nil }
+    right = Class.new { def foo = nil }
+
+    message = call_checker(left, right).failure_message
+
+    assert_equal 1, message.scan("foo(a)").size
+  end
+
   def test_failure_message_shows_not_defined_for_missing_method
     left = Class.new { def foo = nil; def bar = nil }
     right = Class.new { def foo = nil }
