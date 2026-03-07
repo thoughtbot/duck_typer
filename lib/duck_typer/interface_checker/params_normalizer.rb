@@ -43,7 +43,7 @@ module DuckTyper
         end
 
         def next_sequential_param(enumerator)
-          enumerator.next
+          enumerator.next.to_sym
         rescue StopIteration
           raise TooManyParametersError, "too many positional parameters, maximum supported is 26"
         end
