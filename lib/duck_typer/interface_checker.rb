@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
 require_relative "interface_checker/result"
-require_relative "interface_checker/method_inspector"
-require_relative "interface_checker/params_normalizer"
-require_relative "interface_checker/null_params_normalizer"
+require_relative "method_inspector"
+require_relative "params_normalizer"
+require_relative "null_params_normalizer"
 
 module DuckTyper
   # Compares the public method signatures of two classes and reports mismatches.

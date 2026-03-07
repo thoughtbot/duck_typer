@@ -9,8 +9,8 @@ class MethodInspectorTest < Minitest::Test
 
   def test_inspectors_have_compatible_interfaces
     assert_interfaces_match [
-      DuckTyper::InterfaceChecker::ClassMethodInspector,
-      DuckTyper::InterfaceChecker::InstanceMethodInspector
+      DuckTyper::MethodInspector::ClassMethodInspector,
+      DuckTyper::MethodInspector::InstanceMethodInspector
     ]
   end
 end
