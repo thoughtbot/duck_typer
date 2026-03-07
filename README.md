@@ -223,6 +223,14 @@ Some things are intentionally out of scope:
   `initialize`: how an object is constructed is not an interface
   concern.
 
+## Stability
+
+DuckTyper is intentionally minimal. It reflects Ruby's own method
+introspection API, which rarely changes — so the gem rarely needs
+to either. When it does change, it will most likely be for additive reasons:
+new API options, better error messages, or broader test framework
+support. It is safe to depend on without worrying about churn.
+
 ## Development
 
 After checking out the repo, run `bin/setup` to install
