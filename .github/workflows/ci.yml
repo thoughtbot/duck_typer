@@ -18,8 +18,5 @@ jobs:
           ruby-version: "3.3"
           bundler-cache: true
 
-      - name: StandardRB
-        run: bundle exec standardrb
-
-      - name: Test
-        run: bundle exec rake test
+      - name: CI
+        run: bundle exec rake ci
