@@ -10,18 +10,11 @@ module DuckTyper
     # parameter structure rather than naming.
     class ParamsNormalizer
       KEYWORD_TYPES = %i[key keyreq].freeze
+      SEQUENTIAL_TYPES = %i[req opt rest keyrest block].freeze
 
       class << self
         def call(params)
-          sequential_name = ("a".."z").to_enum
-
-          sort_keyword_params(params).map do |type, name|
-            if %i[req opt rest keyrest block].include?(type)
-              name = next_sequential_param(sequential_name)
-            end
-
-            [type, name]
-          end
+          sort_keyword_params(params).then { sequentialize_params(_1) }
         end
 
         private
@@ -35,6 +28,18 @@ module DuckTyper
           end
 
           non_keywords + keywords.sort_by { |_, name| name }
+        end
+
+        def sequentialize_params(params)
+          sequential_name = ("a".."z").to_enum
+
+          params.map do |type, name|
+            if SEQUENTIAL_TYPES.include?(type)
+              name = next_sequential_param(sequential_name)
+            end
+
+            [type, name]
+          end
         end
 
         def next_sequential_param(enumerator)

@@ -30,12 +30,6 @@ module DuckTyper
       (left_params - right_params) + (right_params - left_params)
     end
 
-    def method_params(inspector, method_name, object)
-      inspector.parameters_for(method_name)
-    rescue NameError
-      raise MethodNotFoundError, "undefined method `#{method_name}' for #{object}"
-    end
-
     def params_for_comparison(object, params_processor = -> { _1 })
       inspector = @inspectors[object]
       methods = @partial_interface_methods || inspector.public_methods
@@ -57,6 +51,12 @@ module DuckTyper
 
         [method_name, args]
       end
+    end
+
+    def method_params(inspector, method_name, object)
+      inspector.parameters_for(method_name)
+    rescue NameError
+      raise MethodNotFoundError, "undefined method `#{method_name}' for #{object}"
     end
 
     def diff_message(left, right, diff)
