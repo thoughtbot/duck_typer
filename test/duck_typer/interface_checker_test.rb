@@ -2,12 +2,9 @@ require "minitest/autorun"
 require_relative "../../lib/duck_typer"
 
 class InterfaceCheckerTest < Minitest::Test
-  def new_checker(**opts)
-    DuckTyper::InterfaceChecker.new(**opts)
-  end
-
   def call_checker(left, right, **opts)
-    new_checker(**opts).call(left, right)
+    checker = DuckTyper::InterfaceChecker.new(**opts)
+    checker.call(left, right)
   end
 
   def match?(left, right, **opts)
@@ -350,17 +347,26 @@ class InterfaceCheckerTest < Minitest::Test
   # Error handling
 
   def test_invalid_type_raises_argument_error
-    assert_raises(ArgumentError) { new_checker(type: :invalid) }
+    left = Class.new { def foo = nil }
+    right = Class.new { def foo = nil }
+
+    assert_raises(ArgumentError) { call_checker(left, right, type: :invalid) }
   end
 
   def test_invalid_type_error_message_includes_invalid_value
-    error = assert_raises(ArgumentError) { new_checker(type: :invalid) }
+    left = Class.new { def foo = nil }
+    right = Class.new { def foo = nil }
+
+    error = assert_raises(ArgumentError) { call_checker(left, right, type: :invalid) }
 
     assert_includes error.message, ":invalid"
   end
 
   def test_invalid_type_error_message_includes_valid_options
-    error = assert_raises(ArgumentError) { new_checker(type: :invalid) }
+    left = Class.new { def foo = nil }
+    right = Class.new { def foo = nil }
+
+    error = assert_raises(ArgumentError) { call_checker(left, right, type: :invalid) }
 
     assert_includes error.message, "instance_methods"
     assert_includes error.message, "class_methods"
