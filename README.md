@@ -107,13 +107,23 @@ def test_payment_processors_have_compatible_interfaces
 end
 ```
 
-The same `type:` and `methods:` options are supported:
+By default, DuckTyper checks instance method interfaces. To check
+class-level interfaces instead, pass `type: :class_methods`:
 
 ```ruby
 assert_interfaces_match [StripeProcessor, PaypalProcessor],
-  type: :class_methods,
+  type: :class_methods
+```
+
+To check only a subset of methods (partial interface), use `methods:`:
+
+```ruby
+assert_interfaces_match [StripeProcessor, PaypalProcessor],
   methods: %i[charge refund]
 ```
+
+This is useful if your class implements multiple interfaces, in
+which case you can write an assertion for each.
 
 ### RSpec
 

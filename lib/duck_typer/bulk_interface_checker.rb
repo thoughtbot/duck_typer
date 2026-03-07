@@ -11,7 +11,7 @@ module DuckTyper
     def call(&block)
       @objects.each_cons(2).map do |left, right|
         result = @checker.call(left, right)
-        block&.call(left, right, result)
+        block&.call(result)
         result
       end
     end
