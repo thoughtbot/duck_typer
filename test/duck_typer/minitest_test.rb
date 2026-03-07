@@ -9,7 +9,7 @@ class MinitestHelperTest < Minitest::Test
     b = Class.new { def foo(a:) = nil; def bar = nil }
     c = Class.new { def foo(a:) = nil; def bar = nil }
 
-    assert_interface_matches [a, b, c]
+    assert_interfaces_match [a, b, c]
   end
 
   def test_fails_when_interfaces_do_not_match
@@ -18,7 +18,7 @@ class MinitestHelperTest < Minitest::Test
     c = Class.new { def foo = nil }
 
     assert_raises(Minitest::Assertion) do
-      assert_interface_matches [a, b, c]
+      assert_interfaces_match [a, b, c]
     end
   end
 
@@ -28,7 +28,7 @@ class MinitestHelperTest < Minitest::Test
     c = Class.new { def foo = nil }
 
     error = assert_raises(Minitest::Assertion) do
-      assert_interface_matches [a, b, c]
+      assert_interfaces_match [a, b, c]
     end
 
     assert_includes error.message, "foo(a)"

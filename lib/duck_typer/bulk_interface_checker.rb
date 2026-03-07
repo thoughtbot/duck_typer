@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module DuckTyper
   # Runs interface checks across all consecutive pairs of classes in a list.
   class BulkInterfaceChecker

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require_relative "interface_checker/result"
 require_relative "interface_checker/method_inspector"
 require_relative "interface_checker/params_normalizer"

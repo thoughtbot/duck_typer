@@ -1,8 +1,10 @@
+# frozen_string_literal: true
+
 require_relative "../duck_typer"
 
 module DuckTyper
   module Minitest
-    def assert_interface_matches(objects, type: :instance_methods, methods: nil)
+    def assert_interfaces_match(objects, type: :instance_methods, methods: nil)
       checker = BulkInterfaceChecker
         .new(objects, type:, partial_interface_methods: methods)
 
