@@ -12,9 +12,9 @@ Gem::Specification.new do |spec|
   spec.homepage = "https://github.com/thoughtbot/duck_typer"
   spec.required_ruby_version = ">= 3.1.0"
 
+  spec.license = "MIT"
   spec.metadata["allowed_push_host"] = "https://rubygems.org"
 
-  spec.metadata["homepage_uri"] = spec.homepage
   spec.metadata["source_code_uri"] = "https://github.com/thoughtbot/duck_typer"
   spec.metadata["changelog_uri"] = "https://github.com/thoughtbot/duck_typer/blob/main/CHANGELOG.md"
   spec.metadata["rubygems_mfa_required"] = "true"
