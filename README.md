@@ -77,7 +77,7 @@ class PaymentProcessorTest < Minitest::Test
 end
 ```
 
-To make `assert_interface_matches` available across all tests,
+To make `assert_interfaces_match` available across all tests,
 require the integration in `test_helper.rb` and include the module
 in your base test class:
 
@@ -98,19 +98,19 @@ class Minitest::Test
 end
 ```
 
-Then use `assert_interface_matches` to assert that a list of
+Then use `assert_interfaces_match` to assert that a list of
 classes share compatible interfaces:
 
 ```ruby
 def test_payment_processors_have_compatible_interfaces
-  assert_interface_matches [StripeProcessor, PaypalProcessor, BraintreeProcessor]
+  assert_interfaces_match [StripeProcessor, PaypalProcessor, BraintreeProcessor]
 end
 ```
 
 The same `type:` and `methods:` options are supported:
 
 ```ruby
-assert_interface_matches [StripeProcessor, PaypalProcessor],
+assert_interfaces_match [StripeProcessor, PaypalProcessor],
   type: :class_methods,
   methods: %i[charge refund]
 ```
@@ -157,9 +157,8 @@ by calling:
 DuckTyper::RSpec.define_shared_example
 ```
 
-This registers a shared example named `"an interface"`. To avoid
-conflicts with an existing shared example of the same name, pass
-a custom name:
+This registers a shared example named `"an interface"`. The name
+can be changed by passing a custom one:
 
 ```ruby
 DuckTyper::RSpec.define_shared_example("a compatible interface")

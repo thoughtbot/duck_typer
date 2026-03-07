@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module DuckTyper
   class InterfaceChecker
     # Normalizes method parameters to enable interface comparison. For
