@@ -3,6 +3,7 @@
 require_relative "interface_checker/result"
 require_relative "interface_checker/method_inspector"
 require_relative "interface_checker/params_normalizer"
+require_relative "interface_checker/null_params_normalizer"
 
 module DuckTyper
   # Compares the public method signatures of two classes and reports mismatches.
@@ -30,7 +31,7 @@ module DuckTyper
       (left_params - right_params) + (right_params - left_params)
     end
 
-    def params_for_comparison(object, params_processor = -> { _1 })
+    def params_for_comparison(object, params_processor)
       inspector = @inspectors[object]
       methods = @partial_interface_methods || inspector.public_methods
 
@@ -61,8 +62,8 @@ module DuckTyper
 
     def diff_message(left, right, diff)
       methods = diff.map(&:first).uniq
-      left_params = params_for_comparison(left).to_h.slice(*methods)
-      right_params = params_for_comparison(right).to_h.slice(*methods)
+      left_params = params_for_comparison(left, NullParamsNormalizer).to_h.slice(*methods)
+      right_params = params_for_comparison(right, NullParamsNormalizer).to_h.slice(*methods)
 
       methods.map do |method_name|
         <<~DIFF
