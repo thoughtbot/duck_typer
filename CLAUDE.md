@@ -15,6 +15,19 @@
 - After releasing, delete the generated `.gem` files from the root
   directory — they are not committed and should not linger.
 
+## Ruby version
+
+For now, use the minimum required Ruby version for development —
+this ensures the gem works for everyone who meets that requirement.
+
+When updating the minimum required Ruby version, update it in all
+of these places:
+
+- `.ruby-version`
+- `.tool-versions`
+- `duck_typer.gemspec` (`spec.required_ruby_version`)
+- `.github/workflows/ci.yml` (`ruby-version`)
+
 ## Commands
 
 - `bundle exec rake test` — run Minitest and RSpec suites
