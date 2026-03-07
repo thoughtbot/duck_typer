@@ -12,6 +12,15 @@ class MinitestHelperTest < Minitest::Test
     assert_interfaces_match [a, b, c]
   end
 
+  def test_passes_for_matching_pairs_even_when_another_class_mismatches
+    a = Class.new { def foo(a) = nil }
+    b = Class.new { def foo(a) = nil }
+    c = Class.new { def foo = nil }
+
+    assert_interfaces_match [a, b]
+    assert_raises(Minitest::Assertion) { assert_interfaces_match [a, b, c] }
+  end
+
   def test_fails_when_interfaces_do_not_match
     a = Class.new { def foo(a) = nil }
     b = Class.new { def foo(a) = nil }

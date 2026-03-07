@@ -6,7 +6,7 @@ module DuckTyper
   # are equivalent — so keywords are sorted alphabetically. Positional
   # argument names are also replaced with sequential placeholders,
   # focusing the comparison on parameter structure rather than naming.
-  class ParamsNormalizer
+  class ParamsNormalizer # :nodoc:
     KEYWORD_TYPES = %i[key keyreq].freeze
     SEQUENTIAL_TYPES = %i[req opt rest keyrest block].freeze
 
