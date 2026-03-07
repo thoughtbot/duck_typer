@@ -2,6 +2,16 @@
 
 ## Release
 
+- Before writing to `CHANGELOG.md`, pull from `main` and do a
+  detailed analysis of all commits since the last tag (e.g.
+  `git log <last-tag>..HEAD`).
+- Based on the analysis, determine the next version number: bump
+  the patch version for internal changes or bug fixes, the minor
+  version for new features, and the major version for breaking
+  changes. Confirm the version number with the programmer before
+  proceeding.
+- Update `CHANGELOG.md` with the new version and a summary of
+  changes.
 - After releasing, delete the generated `.gem` files from the root
   directory — they are not committed and should not linger.
 
