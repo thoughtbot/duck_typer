@@ -42,3 +42,5 @@
 - Extract constants for inline literals used in conditionals.
 - Private methods mirror each other when they share a common role
   (e.g. `sort_keyword_params` / `sequentialize_params`).
+- Use `params` instead of `parameters` in names (e.g. method names,
+  variable names).

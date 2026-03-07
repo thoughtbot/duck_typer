@@ -32,11 +32,10 @@ module DuckTyper
     end
 
     def params_for_comparison(object, params_processor)
-      inspector = @inspectors[object]
-      methods = @partial_interface_methods || inspector.public_methods
+      methods = @partial_interface_methods || @inspectors[object].public_methods
 
       methods.map do |method_name|
-        params = method_params(inspector, method_name, object)
+        params = method_params(method_name, object)
         args = params_processor.call(params).map do |type, name|
           case type
           when :key then "#{name}: :opt"
@@ -54,8 +53,8 @@ module DuckTyper
       end
     end
 
-    def method_params(inspector, method_name, object)
-      inspector.parameters_for(method_name)
+    def method_params(method_name, object)
+      @inspectors[object].parameters_for(method_name)
     rescue NameError
       raise MethodNotFoundError, "undefined method `#{method_name}' for #{object}"
     end
@@ -74,8 +73,7 @@ module DuckTyper
     end
 
     def join_signature(object, method_name, all_params)
-      inspector = @inspectors[object]
-      display_name = inspector.display_name_for(method_name)
+      display_name = @inspectors[object].display_name_for(method_name)
       method_params = all_params.assoc(method_name)&.last
 
       signature = if method_params
