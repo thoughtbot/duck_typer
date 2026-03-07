@@ -7,13 +7,7 @@ require_relative "interface_checker/params_normalizer"
 module DuckTyper
   # Compares the public method signatures of two classes and reports mismatches.
   class InterfaceChecker
-    TYPES = %i[instance_methods class_methods].freeze
-
     def initialize(type: :instance_methods, partial_interface_methods: nil)
-      unless TYPES.include?(type)
-        raise ArgumentError, "Invalid type #{type.inspect}, must be one of #{TYPES}"
-      end
-
       @type = type
       @partial_interface_methods = partial_interface_methods
       @inspectors = Hash.new { |h, k| h[k] = MethodInspector.for(k, @type) }

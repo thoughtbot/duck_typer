@@ -3,7 +3,13 @@
 module DuckTyper
   class InterfaceChecker
     class MethodInspector
+      TYPES = %i[instance_methods class_methods].freeze
+
       def self.for(object, type)
+        unless TYPES.include?(type)
+          raise ArgumentError, "Invalid type #{type.inspect}, must be one of #{TYPES}"
+        end
+
         if type == :class_methods
           ClassMethodInspector
         else
