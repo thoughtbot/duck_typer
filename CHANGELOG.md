@@ -1,5 +1,27 @@
 # Changelog
 
+## [0.3.2] - 2026-03-07
+
+### Changed
+- Move type validation and `TYPES` constant to `MethodInspector`
+- Refactor `ParamsNormalizer`: extract `SEQUENTIAL_TYPES` constant
+  and `sequentialize_params`, reorder methods for natural reading order
+- Introduce `NullParamsNormalizer` as an explicit null object,
+  replacing an implicit identity lambda
+- Move `MethodInspector`, `ParamsNormalizer`, and `NullParamsNormalizer`
+  to the `DuckTyper` namespace; nest `ClassMethodInspector` and
+  `InstanceMethodInspector` inside `MethodInspector`
+- Use `assoc` to look up method params in `join_signature`
+- Inline `inspector` locals throughout `InterfaceChecker`
+- Mark `ParamsNormalizer`, `NullParamsNormalizer`, and `MethodInspector`
+  as internal (`:nodoc:`)
+
+### Added
+- `ParamsNormalizer` test suite
+- Test that each differing method appears only once in `failure_message`
+- Test that `assert_interfaces_match` passes for matching pairs even
+  when another class in the list mismatches
+
 ## [0.3.1] - 2026-03-07
 
 ### Added
