@@ -34,6 +34,13 @@ class InterfaceCheckerTest < Minitest::Test
     refute match?(left, right)
   end
 
+  def test_extra_method_on_right_does_not_match
+    left = Class.new { def foo = nil }
+    right = Class.new { def foo = nil; def bar = nil }
+
+    refute match?(left, right)
+  end
+
   # Positional arguments
 
   def test_same_required_positional_args_match
