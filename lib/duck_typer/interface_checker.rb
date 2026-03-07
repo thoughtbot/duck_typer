@@ -20,47 +20,20 @@ module DuckTyper
     end
 
     def call(left, right)
-      left_params = params_for_comparison(left, ParamsNormalizer)
-      right_params = params_for_comparison(right, ParamsNormalizer)
-      diff = (left_params - right_params) + (right_params - left_params)
+      diff = calculate_diff(left, right)
+      match = -> { diff.empty? }
+      diff_message = -> { diff_message(left, right, diff) }
 
-      match = -> { match?(left_params, right_params) }
-      method_signatures = -> { build_method_signatures(left, right, diff) }
-
-      Result.new(left:, right:, match:, method_signatures:)
+      Result.new(left:, right:, match:, diff_message:)
     end
 
     private
 
-    def match?(left_params, right_params)
-      diff = (left_params - right_params) + (right_params - left_params)
-      diff.empty?
-    end
+    def calculate_diff(left, right)
+      left_params = params_for_comparison(left, ParamsNormalizer)
+      right_params = params_for_comparison(right, ParamsNormalizer)
 
-    def build_method_signatures(left, right, diff)
-      methods = diff.map(&:first).uniq
-      left_params = params_for_comparison(left).to_h.slice(*methods)
-      right_params = params_for_comparison(right).to_h.slice(*methods)
-
-      methods.map do |method_name|
-        <<~DIFF
-          #{join_signature(left, method_name, left_params)}
-          #{join_signature(right, method_name, right_params)}
-        DIFF
-      end.join("\n")
-    end
-
-    def join_signature(object, method_name, params)
-      inspector = @inspectors[object]
-      display_name = inspector.display_name_for(method_name)
-
-      signature = if params[method_name]
-        "#{display_name}(#{params[method_name].join(", ")})"
-      else
-        "#{display_name} not defined"
-      end
-
-      "#{object}: #{signature}"
+      (left_params - right_params) + (right_params - left_params)
     end
 
     def method_params(inspector, method_name, object)
@@ -84,11 +57,38 @@ module DuckTyper
           when :req then name.to_s
           when :opt then "#{name} = :opt"
           when :rest then "*#{name}"
+          when :nokey then "**nil"
           end
         end
 
         [method_name, args]
       end
+    end
+
+    def diff_message(left, right, diff)
+      methods = diff.map(&:first).uniq
+      left_params = params_for_comparison(left).to_h.slice(*methods)
+      right_params = params_for_comparison(right).to_h.slice(*methods)
+
+      methods.map do |method_name|
+        <<~DIFF
+          #{join_signature(left, method_name, left_params)}
+          #{join_signature(right, method_name, right_params)}
+        DIFF
+      end.join("\n")
+    end
+
+    def join_signature(object, method_name, params)
+      inspector = @inspectors[object]
+      display_name = inspector.display_name_for(method_name)
+
+      signature = if params[method_name]
+        "#{display_name}(#{params[method_name].join(", ")})"
+      else
+        "#{display_name} not defined"
+      end
+
+      "#{object}: #{signature}"
     end
   end
 end
