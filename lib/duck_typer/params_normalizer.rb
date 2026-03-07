@@ -12,7 +12,7 @@ module DuckTyper
 
     class << self
       def call(params)
-        sort_keyword_params(params).then { sequentialize_params(_1) }
+        sort_keyword_params(params).then { |sorted| sequentialize_params(sorted) }
       end
 
       private
