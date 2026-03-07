@@ -2,6 +2,12 @@
 
 [![CI](https://github.com/thoughtbot/duck_typer/actions/workflows/ci.yml/badge.svg)](https://github.com/thoughtbot/duck_typer/actions/workflows/ci.yml)
 
+<div align="center">
+  <img alt="DuckTyper mascot" src="assets/swan_mugshot.png" width="300">
+</div>
+
+> If it quacks like a duck, it's a duck... or is it?
+
 DuckTyper enforces duck-typed interfaces in Ruby by comparing the
 public method signatures of classes, surfacing mismatches through
 your test suite.
