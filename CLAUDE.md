@@ -1,9 +1,16 @@
 # CLAUDE.md
 
+## Release
+
+- After releasing, delete the generated `.gem` files from the root
+  directory — they are not committed and should not linger.
+
 ## Commands
 
-- `bundle exec rake` — run tests, linting, and lockfile drift check
-- `bundle exec rake test` — run Minitest suite only
+- `bundle exec rake test` — run Minitest and RSpec suites
+- `bundle exec rake minitest` — run Minitest suite only
+- `bundle exec rake ci` — run tests, linting, and lockfile drift check
+  (always run before pushing)
 - `bundle exec standardrb` — lint
 
 ## Tests
@@ -23,6 +30,12 @@
 ## Code style
 
 - Markdown files should be kept at 70 columns.
+- File paths must match the Ruby namespace: `DuckTyper::Foo` lives
+  in `lib/duck_typer/foo.rb`, not under a subdirectory of another
+  class.
+- Classes are only nested inside another class when they are
+  intrinsically part of it (e.g. `InterfaceChecker::Result`).
+  Otherwise they belong at the `DuckTyper` root level.
 - Methods are defined in natural reading order: callers before
   callees.
 - Leave a blank line before the return value in multi-line methods.

@@ -5,8 +5,8 @@ require_relative "../../lib/duck_typer/minitest"
 class ParamsNormalizerTest < Minitest::Test
   include DuckTyper::Minitest
 
-  ParamsNormalizer = DuckTyper::InterfaceChecker::ParamsNormalizer
-  NullParamsNormalizer = DuckTyper::InterfaceChecker::NullParamsNormalizer
+  ParamsNormalizer = DuckTyper::ParamsNormalizer
+  NullParamsNormalizer = DuckTyper::NullParamsNormalizer
 
   def normalize(params)
     ParamsNormalizer.call(params)
