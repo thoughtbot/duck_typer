@@ -1,0 +1,17 @@
+module DuckTyper
+  # Runs interface checks across all consecutive pairs of classes in a list.
+  class BulkInterfaceChecker
+    def initialize(objects, type: :instance_methods, partial_interface_methods: nil)
+      @objects = objects
+      @checker = InterfaceChecker.new(type:, partial_interface_methods:)
+    end
+
+    def call(&block)
+      @objects.each_cons(2).map do |left, right|
+        result = @checker.call(left, right)
+        block&.call(left, right, result)
+        result
+      end
+    end
+  end
+end
