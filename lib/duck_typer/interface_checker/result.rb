@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module DuckTyper
   class InterfaceChecker
     class Result
@@ -19,14 +21,8 @@ module DuckTyper
           Expected #{@left} and #{@right} to have compatible method \
           signatures, but the following signatures do not match:
 
-          #{method_signatures}
+          #{@method_signatures.call}
         MSG
-      end
-
-      private
-
-      def method_signatures
-        @method_signatures.call
       end
     end
   end
