@@ -54,8 +54,8 @@ When interfaces don't match, DuckTyper reports the differing
 signatures:
 
 ```
-Expected StripeProcessor and BraintreeProcessor to have compatible
-method signatures, but the following signatures do not match:
+Expected StripeProcessor and BraintreeProcessor to implement compatible
+interfaces, but the following method signatures differ:
 
 StripeProcessor: charge(amount, currency:)
 BraintreeProcessor: charge(amount, currency:, description:)
@@ -189,6 +189,33 @@ it_behaves_like "an interface", [StripeProcessor, PaypalProcessor],
   type: :class_methods,
   methods: %i[charge refund]
 ```
+
+## Limitations
+
+DuckTyper checks the **structure** of public method signatures
+— the number of parameters, their kinds (required, optional,
+keyword, rest, block), and keyword argument names. It does not
+verify the following, which should be covered by your regular
+test suite:
+
+- **Parameter types.** DuckTyper only checks that both methods
+  declare an `amount` parameter — not what type of value it
+  expects. Two methods with identical signatures may still be
+  incompatible if they expect different types.
+- **Return types.** Two methods can have identical signatures
+  but return completely different things.
+- **Behavior.** Matching signatures are a necessary but not
+  sufficient condition for duck typing to work correctly at
+  runtime. DuckTyper catches structural drift, not semantic
+  divergence.
+
+Some things are intentionally out of scope:
+
+- **Private methods and `initialize`.** Private methods are not
+  part of a class's public interface — they are implementation
+  details and intentionally excluded. The same applies to
+  `initialize`: how an object is constructed is not an interface
+  concern.
 
 ## Development
 

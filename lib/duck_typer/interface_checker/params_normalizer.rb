@@ -9,22 +9,40 @@ module DuckTyper
     # sequential placeholders when appropriate, focusing the comparison on
     # parameter structure rather than naming.
     class ParamsNormalizer
-      def self.call(params)
-        sequential_name = ("a".."z").to_enum
+      KEYWORD_TYPES = %i[key keyreq].freeze
 
-        params.map do |type, name|
-          name = next_sequential_param(sequential_name) if %i[req opt rest keyrest block].include?(type)
+      class << self
+        def call(params)
+          sequential_name = ("a".."z").to_enum
 
-          [type, name]
+          sort_keyword_params(params).map do |type, name|
+            if %i[req opt rest keyrest block].include?(type)
+              name = next_sequential_param(sequential_name)
+            end
+
+            [type, name]
+          end
+        end
+
+        private
+
+        # Keyword argument order is irrelevant to a method's interface —
+        # m(a:, b:) and m(b:, a:) are equivalent. Sort keyword params
+        # alphabetically so comparison is order-independent.
+        def sort_keyword_params(params)
+          keywords, non_keywords = params.partition do |type, _|
+            KEYWORD_TYPES.include?(type)
+          end
+
+          non_keywords + keywords.sort_by { |_, name| name }
+        end
+
+        def next_sequential_param(enumerator)
+          enumerator.next
+        rescue StopIteration
+          raise TooManyParametersError, "too many positional parameters, maximum supported is 26"
         end
       end
-
-      def self.next_sequential_param(enumerator)
-        enumerator.next
-      rescue StopIteration
-        raise TooManyParametersError, "too many positional parameters, maximum supported is 26"
-      end
-      private_class_method :next_sequential_param
     end
   end
 end

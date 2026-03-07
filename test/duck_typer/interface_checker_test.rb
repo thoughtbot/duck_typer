@@ -104,6 +104,27 @@ class InterfaceCheckerTest < Minitest::Test
     refute match?(left, right)
   end
 
+  def test_required_keyword_args_match_regardless_of_order
+    left = Class.new { def foo(a:, b:) = nil }
+    right = Class.new { def foo(b:, a:) = nil }
+
+    assert match?(left, right)
+  end
+
+  def test_optional_keyword_args_match_regardless_of_order
+    left = Class.new { def foo(a: nil, b: nil) = nil }
+    right = Class.new { def foo(b: nil, a: nil) = nil }
+
+    assert match?(left, right)
+  end
+
+  def test_mixed_args_match_regardless_of_keyword_order
+    left = Class.new { def foo(a, b:, c: nil, &blk) = nil }
+    right = Class.new { def foo(x, c: nil, b:, &block) = nil }
+
+    assert match?(left, right)
+  end
+
   def test_required_keyword_vs_optional_keyword_does_not_match
     left = Class.new { def foo(a:) = nil }
     right = Class.new { def foo(a: nil) = nil }
@@ -165,6 +186,36 @@ class InterfaceCheckerTest < Minitest::Test
   def test_rest_arg_with_different_keyword_args_does_not_match
     left = Class.new { def foo(*args, a:) = nil }
     right = Class.new { def foo(*args, b:) = nil }
+
+    refute match?(left, right)
+  end
+
+  # No-keyword arguments
+
+  def test_no_keyword_args_match
+    left = Class.new { def foo(**nil) = nil }
+    right = Class.new { def foo(**nil) = nil }
+
+    assert match?(left, right)
+  end
+
+  def test_no_keyword_arg_vs_none_does_not_match
+    left = Class.new { def foo(**nil) = nil }
+    right = Class.new { def foo = nil }
+
+    refute match?(left, right)
+  end
+
+  def test_nokey_with_positional_and_block_match
+    left = Class.new { def foo(a, b, **nil, &blk) = nil }
+    right = Class.new { def foo(x, y, **nil, &block) = nil }
+
+    assert match?(left, right)
+  end
+
+  def test_nokey_vs_keyrest_does_not_match
+    left = Class.new { def foo(a, **nil) = nil }
+    right = Class.new { def foo(a, **opts) = nil }
 
     refute match?(left, right)
   end
@@ -355,6 +406,13 @@ class InterfaceCheckerTest < Minitest::Test
 
   # failure_message output
 
+  def test_failure_message_returns_nil_when_interfaces_match
+    left = Class.new { def foo = nil }
+    right = Class.new { def foo = nil }
+
+    assert_nil call_checker(left, right).failure_message
+  end
+
   def test_failure_message_includes_class_names
     left = Class.new { def foo(a) = nil }
     right = Class.new { def foo = nil }
@@ -391,6 +449,15 @@ class InterfaceCheckerTest < Minitest::Test
     message = call_checker(left, right, type: :class_methods).failure_message
 
     assert_includes message, "self.foo"
+  end
+
+  def test_failure_message_includes_nokey_signature
+    left = Class.new { def foo(**nil) = nil }
+    right = Class.new { def foo = nil }
+
+    message = call_checker(left, right).failure_message
+
+    assert_includes message, "**nil"
   end
 
   def test_positional_arg_names_are_preserved_in_failure_message

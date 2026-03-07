@@ -5,11 +5,11 @@ module DuckTyper
     class Result
       attr_reader :left, :right
 
-      def initialize(left:, right:, match:, method_signatures:)
+      def initialize(left:, right:, match:, diff_message:)
         @left = left
         @right = right
         @match = match
-        @method_signatures = method_signatures
+        @diff_message = diff_message
       end
 
       def match?
@@ -17,11 +17,13 @@ module DuckTyper
       end
 
       def failure_message
-        <<~MSG
-          Expected #{@left} and #{@right} to have compatible method \
-          signatures, but the following signatures do not match:
+        return if match?
 
-          #{@method_signatures.call}
+        <<~MSG
+          Expected #{@left} and #{@right} to implement compatible \
+          interfaces, but the following method signatures differ:
+
+          #{@diff_message.call}
         MSG
       end
     end
