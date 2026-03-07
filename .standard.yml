@@ -1,0 +1,5 @@
+ignore:
+  - "test/**/*":
+    - Style/Semicolon
+  - "spec/**/*":
+    - Style/Semicolon
