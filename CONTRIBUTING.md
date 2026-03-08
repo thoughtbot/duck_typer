@@ -34,11 +34,11 @@ Run the setup script.
 Make sure everything passes:
 
 ```
-bundle exec rake test
-bundle exec standardrb
+bundle exec rake ci
 ```
 
-Make your change, with new passing tests.
+Make your change, with new passing tests. Before pushing, run
+`bundle exec rake ci` again to make sure nothing is broken.
 
 Push to your fork. Write a [good commit message][commit]. Submit a
 pull request.

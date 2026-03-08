@@ -129,6 +129,13 @@ class InterfaceCheckerTest < Minitest::Test
     assert match?(left, right)
   end
 
+  def test_mixed_args_dont_match_when_one_keyword_differs
+    left = Class.new { def foo(a, b:, cd:, d: nil, &blk) = nil }
+    right = Class.new { def foo(x, c:, b:, d: nil, &block) = nil }
+
+    refute match?(left, right)
+  end
+
   def test_required_keyword_vs_optional_keyword_does_not_match
     left = Class.new { def foo(a:) = nil }
     right = Class.new { def foo(a: nil) = nil }
