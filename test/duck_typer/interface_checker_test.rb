@@ -511,4 +511,27 @@ class InterfaceCheckerTest < Minitest::Test
       "foo(bananas, coconuts, *others, format:, locale: :opt, **opts, &blk)"
     )
   end
+
+  # Strict mode
+
+  def test_strict_mode_positional_arg_names_must_match
+    left = Class.new { def foo(a, b) = nil }
+    right = Class.new { def foo(x, y) = nil }
+
+    refute match?(left, right, strict: true)
+  end
+
+  def test_strict_mode_same_positional_arg_names_match
+    left = Class.new { def foo(a, b) = nil }
+    right = Class.new { def foo(a, b) = nil }
+
+    assert match?(left, right, strict: true)
+  end
+
+  def test_strict_mode_keyword_order_does_not_matter
+    left = Class.new { def foo(a:, b:) = nil }
+    right = Class.new { def foo(b:, a:) = nil }
+
+    assert match?(left, right, strict: true)
+  end
 end
