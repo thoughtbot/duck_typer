@@ -45,7 +45,7 @@ aligned as the design changes.
 Add to your Gemfile:
 
 ```ruby
-gem "duck_typer"
+gem "duck_typer", group: :test
 ```
 
 Then run:
@@ -109,7 +109,11 @@ classes share compatible interfaces:
 
 ```ruby
 def test_payment_processors_have_compatible_interfaces
-  assert_interfaces_match [StripeProcessor, PaypalProcessor, BraintreeProcessor]
+  assert_interfaces_match [
+    StripeProcessor,
+    PaypalProcessor,
+    BraintreeProcessor
+  ]
 end
 ```
 
@@ -147,7 +151,8 @@ share compatible interfaces:
 ```ruby
 RSpec.describe "payment processors" do
   it "have compatible interfaces" do
-    expect([StripeProcessor, PaypalProcessor, BraintreeProcessor]).to have_matching_interfaces
+    expect([StripeProcessor, PaypalProcessor, BraintreeProcessor])
+      .to have_matching_interfaces
   end
 end
 ```
@@ -155,13 +160,15 @@ end
 For class-level interfaces, pass `type: :class_methods`:
 
 ```ruby
-expect([StripeProcessor, PaypalProcessor]).to have_matching_interfaces(type: :class_methods)
+expect([StripeProcessor, PaypalProcessor])
+  .to have_matching_interfaces(type: :class_methods)
 ```
 
 To check only a subset of methods, use `methods:`:
 
 ```ruby
-expect([StripeProcessor, PaypalProcessor]).to have_matching_interfaces(methods: %i[charge refund])
+expect([StripeProcessor, PaypalProcessor])
+  .to have_matching_interfaces(methods: %i[charge refund])
 ```
 
 #### Shared example
@@ -184,7 +191,11 @@ Then use it in your specs:
 
 ```ruby
 RSpec.describe "payment processors" do
-  it_behaves_like "an interface", [StripeProcessor, PaypalProcessor, BraintreeProcessor]
+  it_behaves_like "an interface", [
+    StripeProcessor,
+    PaypalProcessor,
+    BraintreeProcessor
+  ]
 end
 ```
 
