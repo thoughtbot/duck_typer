@@ -1,5 +1,29 @@
 # Changelog
 
+## [0.4.0] - 2026-03-09
+
+### Added
+- Strict mode (`strict: true`) for interface comparison: positional
+  argument names must match exactly. Available on
+  `assert_interfaces_match`, `have_matching_interfaces`, and the
+  RSpec shared example. Keyword argument names always matter
+  regardless of this setting.
+- `assert_duck_types_match` as an alias for `assert_interfaces_match`
+- `have_matching_duck_types` as an alias for `have_matching_interfaces`
+- `BulkInterfaceChecker` now raises `ArgumentError` when fewer than
+  two classes are given
+
+### Fixed
+- RSpec shared example was broken on Ruby 3.1 due to proc argument
+  destructuring differences between Ruby versions
+
+### Changed
+- `ParamsNormalizer` refactored into a factory (`ParamsNormalizer.for(strict:)`)
+  with extracted modules: `KeywordNormalizer`, `SequentialNormalizer`,
+  `DefaultParamsNormalizer`, `StrictParamsNormalizer`, and
+  `NullParamsNormalizer` — all consolidated in a single file
+- CI now runs against Ruby 3.1 (minimum) and 3.4 (latest)
+
 ## [0.3.2] - 2026-03-07
 
 ### Changed
