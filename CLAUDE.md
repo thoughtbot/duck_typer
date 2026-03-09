@@ -28,6 +28,15 @@ of these places:
 - `duck_typer.gemspec` (`spec.required_ruby_version`)
 - `.github/workflows/ci.yml` (`ruby-version`)
 
+## Git
+
+- Before staging specific files, always run `git status` to check
+  whether the staging area already has changes that would be
+  unintentionally included in the commit.
+- After staging, double-check the staged changes match what was
+  asked before committing.
+- Always ask for confirmation before pushing.
+
 ## Commands
 
 - `bundle exec rake test` — run Minitest and RSpec suites
