@@ -16,6 +16,8 @@ RSpec::Matchers.define :have_matching_interfaces do |type: :instance_methods, me
   end
 end
 
+RSpec::Matchers.alias_matcher :have_matching_duck_types, :have_matching_interfaces
+
 module DuckTyper
   module RSpec
     def self.define_shared_example(name = "an interface")

@@ -18,6 +18,7 @@ RSpec.describe "an interface" do
       c = Class.new { def foo(a:) = nil; def bar = nil }
 
       expect([a, b, c]).to have_matching_interfaces
+      expect([a, b, c]).to have_matching_duck_types
     end
   end
 

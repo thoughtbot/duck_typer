@@ -10,6 +10,7 @@ class MinitestHelperTest < Minitest::Test
     c = Class.new { def foo(a:) = nil; def bar = nil }
 
     assert_interfaces_match [a, b, c]
+    assert_duck_types_match [a, b, c]
   end
 
   def test_passes_for_matching_pairs_even_when_another_class_mismatches
