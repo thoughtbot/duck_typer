@@ -35,6 +35,7 @@ of these places:
   unintentionally included in the commit.
 - After staging, double-check the staged changes match what was
   asked before committing.
+- Always run `bundle exec rake ci` before pushing.
 - Always ask for confirmation before pushing.
 
 ## Commands
