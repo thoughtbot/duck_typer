@@ -25,6 +25,10 @@ module DuckTyper
         @object.public_methods - Object.methods
       end
 
+      def private_method?(method_name)
+        @object.singleton_class.private_method_defined?(method_name)
+      end
+
       def parameters_for(method_name)
         @object.method(method_name).parameters
       end
@@ -41,6 +45,10 @@ module DuckTyper
 
       def public_methods
         @object.public_instance_methods - Object.methods
+      end
+
+      def private_method?(method_name)
+        @object.private_method_defined?(method_name)
       end
 
       def parameters_for(method_name)

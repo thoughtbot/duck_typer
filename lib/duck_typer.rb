@@ -8,5 +8,6 @@ require_relative "duck_typer/bulk_interface_checker"
 # method signatures of classes, surfacing mismatches through your test suite.
 module DuckTyper
   class MethodNotFoundError < StandardError; end
+  class PrivateMethodError < StandardError; end
   class TooManyParametersError < StandardError; end
 end

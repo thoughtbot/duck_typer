@@ -55,6 +55,10 @@ module DuckTyper
     end
 
     def method_params(method_name, object)
+      if @inspectors[object].private_method?(method_name)
+        raise PrivateMethodError, "private method `#{method_name}' for #{object}"
+      end
+
       @inspectors[object].parameters_for(method_name)
     rescue NameError
       raise MethodNotFoundError, "undefined method `#{method_name}' for #{object}"

@@ -395,6 +395,39 @@ class InterfaceCheckerTest < Minitest::Test
     assert_equal "too many positional parameters, maximum supported is 26", error.message
   end
 
+  def test_partial_interface_private_method_raises_private_method_error
+    left = Class.new { private; def foo = nil }
+    right = Class.new { private; def foo = nil }
+
+    error = assert_raises(DuckTyper::PrivateMethodError) do
+      call_checker(left, right, partial_interface_methods: [:foo])
+    end
+
+    assert_equal "private method `foo' for #{left}", error.message
+  end
+
+  def test_partial_interface_private_class_method_raises_private_method_error
+    left = Class.new { private_class_method def self.foo = nil }
+    right = Class.new { private_class_method def self.foo = nil }
+
+    error = assert_raises(DuckTyper::PrivateMethodError) do
+      call_checker(left, right, type: :class_methods, partial_interface_methods: [:foo])
+    end
+
+    assert_equal "private method `foo' for #{left}", error.message
+  end
+
+  def test_partial_interface_missing_class_method_raises_method_not_found_error
+    left = Class.new {}
+    right = Class.new { def self.foo = nil }
+
+    error = assert_raises(DuckTyper::MethodNotFoundError) do
+      call_checker(left, right, type: :class_methods, partial_interface_methods: [:foo])
+    end
+
+    assert_equal "undefined method `foo' for #{left}", error.message
+  end
+
   def test_partial_interface_method_missing_on_right_raises_method_not_found_error
     left = Class.new { def foo = nil }
     right = Class.new {}
