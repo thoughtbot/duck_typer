@@ -2,10 +2,10 @@
 
 require_relative "../duck_typer"
 
-RSpec::Matchers.define :have_matching_interfaces do |type: :instance_methods, methods: nil|
+RSpec::Matchers.define :have_matching_interfaces do |type: :instance_methods, methods: nil, strict: false|
   match do |objects|
     checker = DuckTyper::BulkInterfaceChecker
-      .new(objects, type:, partial_interface_methods: methods)
+      .new(objects, type:, partial_interface_methods: methods, strict:)
 
     @failures = checker.call.reject(&:match?)
     @failures.empty?
@@ -21,7 +21,7 @@ RSpec::Matchers.alias_matcher :have_matching_duck_types, :have_matching_interfac
 module DuckTyper
   module RSpec
     def self.define_shared_example(name = "an interface")
-      ::RSpec.shared_examples name do |*objects, type: :instance_methods, methods: nil|
+      ::RSpec.shared_examples name do |*objects, type: :instance_methods, methods: nil, strict: false|
         objects = objects.first
         # We intentionally avoid reusing the have_matching_interfaces matcher
         # here. Since this shared example is defined in gem code, RSpec filters
@@ -29,7 +29,7 @@ module DuckTyper
         # internal RSpec constant instead of useful context.
         it "has compatible interfaces" do
           checker = DuckTyper::BulkInterfaceChecker
-            .new(objects, type:, partial_interface_methods: methods)
+            .new(objects, type:, partial_interface_methods: methods, strict:)
 
           failures = checker.call.reject(&:match?)
 

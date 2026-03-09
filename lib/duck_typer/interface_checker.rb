@@ -3,14 +3,14 @@
 require_relative "interface_checker/result"
 require_relative "method_inspector"
 require_relative "params_normalizer"
-require_relative "null_params_normalizer"
 
 module DuckTyper
   # Compares the public method signatures of two classes and reports mismatches.
   class InterfaceChecker
-    def initialize(type: :instance_methods, partial_interface_methods: nil)
+    def initialize(type: :instance_methods, partial_interface_methods: nil, strict: false)
       @type = type
       @partial_interface_methods = partial_interface_methods
+      @strict = strict
       @inspectors = Hash.new { |h, k| h[k] = MethodInspector.for(k, @type) }
     end
 
@@ -25,18 +25,19 @@ module DuckTyper
     private
 
     def calculate_diff(left, right)
-      left_params = params_for_comparison(left, ParamsNormalizer)
-      right_params = params_for_comparison(right, ParamsNormalizer)
+      normalizer = ParamsNormalizer.for(strict: @strict)
+      left_params = params_for_comparison(left, normalizer)
+      right_params = params_for_comparison(right, normalizer)
 
       (left_params - right_params) + (right_params - left_params)
     end
 
-    def params_for_comparison(object, params_processor)
+    def params_for_comparison(object, params_normalizer)
       methods = @partial_interface_methods || @inspectors[object].public_methods
 
       methods.map do |method_name|
         params = method_params(method_name, object)
-        args = params_processor.call(params).map do |type, name|
+        args = params_normalizer.call(params).map do |type, name|
           case type
           when :key then "#{name}: :opt"
           when :keyreq then "#{name}:"
@@ -61,8 +62,8 @@ module DuckTyper
 
     def diff_message(left, right, diff)
       methods = diff.map(&:first).uniq
-      left_params = params_for_comparison(left, NullParamsNormalizer)
-      right_params = params_for_comparison(right, NullParamsNormalizer)
+      left_params = params_for_comparison(left, ParamsNormalizer::NullParamsNormalizer)
+      right_params = params_for_comparison(right, ParamsNormalizer::NullParamsNormalizer)
 
       methods.map do |method_name|
         <<~DIFF

@@ -138,6 +138,19 @@ which case you can write an assertion for each.
 If you prefer duck typing terminology, `assert_duck_types_match`
 is available as an alias.
 
+To enforce that positional argument names also match (strict
+mode), pass `strict: true`:
+
+```ruby
+assert_interfaces_match [StripeProcessor, PaypalProcessor],
+  strict: true
+```
+
+By default, positional argument names are ignored — only their
+count and kind (required, optional, rest) are compared. In strict
+mode, names must match exactly. Keyword argument names always
+matter regardless of this setting.
+
 ### RSpec
 
 Require the RSpec integration in your `spec_helper.rb`:
@@ -177,6 +190,14 @@ expect([StripeProcessor, PaypalProcessor])
 If you prefer duck typing terminology, `have_matching_duck_types`
 is available as an alias.
 
+To enforce that positional argument names also match, pass
+`strict: true`:
+
+```ruby
+expect([StripeProcessor, PaypalProcessor])
+  .to have_matching_interfaces(strict: true)
+```
+
 #### Shared example
 
 If you prefer shared examples, register one in `spec_helper.rb`
@@ -205,19 +226,22 @@ RSpec.describe "payment processors" do
 end
 ```
 
-The same `type:` and `methods:` options are supported:
+The same `type:`, `methods:`, and `strict:` options are supported:
 
 ```ruby
 it_behaves_like "an interface", [StripeProcessor, PaypalProcessor],
   type: :class_methods,
-  methods: %i[charge refund]
+  methods: %i[charge refund],
+  strict: true
 ```
 
 ## Limitations
 
-DuckTyper checks the **structure** of public method signatures
-— the number of parameters, their kinds (required, optional,
-keyword, rest, block), and keyword argument names. It does not
+By default, DuckTyper checks the **structure** of public method
+signatures — the number of parameters, their kinds (required,
+optional, keyword, rest, block), and keyword argument names. In
+strict mode, positional argument names are also compared. It does
+not
 verify the following, which should be covered by your regular
 test suite:
 
