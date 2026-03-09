@@ -135,6 +135,9 @@ assert_interfaces_match [StripeProcessor, PaypalProcessor],
 This is useful if your class implements multiple interfaces, in
 which case you can write an assertion for each.
 
+If you prefer duck typing terminology, `assert_duck_types_match`
+is available as an alias.
+
 ### RSpec
 
 Require the RSpec integration in your `spec_helper.rb`:
@@ -170,6 +173,9 @@ To check only a subset of methods, use `methods:`:
 expect([StripeProcessor, PaypalProcessor])
   .to have_matching_interfaces(methods: %i[charge refund])
 ```
+
+If you prefer duck typing terminology, `have_matching_duck_types`
+is available as an alias.
 
 #### Shared example
 
