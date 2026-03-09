@@ -117,6 +117,9 @@ def test_payment_processors_have_compatible_interfaces
 end
 ```
 
+> If you prefer duck typing terminology, `assert_duck_types_match`
+> is available as an alias.
+
 By default, DuckTyper checks instance method interfaces. To check
 class-level interfaces instead, pass `type: :class_methods`:
 
@@ -134,9 +137,6 @@ assert_interfaces_match [StripeProcessor, PaypalProcessor],
 
 This is useful if your class implements multiple interfaces, in
 which case you can write an assertion for each.
-
-If you prefer duck typing terminology, `assert_duck_types_match`
-is available as an alias.
 
 To enforce that positional argument names also match (strict
 mode), pass `strict: true`:
@@ -173,6 +173,9 @@ RSpec.describe "payment processors" do
 end
 ```
 
+> If you prefer duck typing terminology, `have_matching_duck_types`
+> is available as an alias.
+
 For class-level interfaces, pass `type: :class_methods`:
 
 ```ruby
@@ -186,9 +189,6 @@ To check only a subset of methods, use `methods:`:
 expect([StripeProcessor, PaypalProcessor])
   .to have_matching_interfaces(methods: %i[charge refund])
 ```
-
-If you prefer duck typing terminology, `have_matching_duck_types`
-is available as an alias.
 
 To enforce that positional argument names also match, pass
 `strict: true`:
