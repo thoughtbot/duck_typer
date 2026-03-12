@@ -2,10 +2,13 @@
 
 require_relative "../duck_typer"
 
-RSpec::Matchers.define :have_matching_interfaces do |type: :instance_methods, methods: nil, strict: false|
-  match do |objects|
+RSpec::Matchers.define :have_matching_interfaces do |name: nil, type: :instance_methods, methods: nil, strict: false|
+  match do |actual|
+    namespace = actual.is_a?(Hash) ? actual[:namespace] : nil
+    objects = namespace ? nil : actual
+
     checker = DuckTyper::BulkInterfaceChecker
-      .new(objects, type:, partial_interface_methods: methods, strict:)
+      .new(objects, namespace:, type:, partial_interface_methods: methods, strict:, name:)
 
     @failures = checker.call.reject(&:match?)
     @failures.empty?
@@ -21,15 +24,16 @@ RSpec::Matchers.alias_matcher :have_matching_duck_types, :have_matching_interfac
 module DuckTyper
   module RSpec
     def self.define_shared_example(name = "an interface")
-      ::RSpec.shared_examples name do |*objects, type: :instance_methods, methods: nil, strict: false|
-        objects = objects.first
+      ::RSpec.shared_examples name do |*args, namespace: nil, name: nil, type: :instance_methods, methods: nil, strict: false|
+        objects = namespace ? nil : args.first
+
         # We intentionally avoid reusing the have_matching_interfaces matcher
         # here. Since this shared example is defined in gem code, RSpec filters
         # it from its backtrace, causing the Failure/Error: line to show an
         # internal RSpec constant instead of useful context.
         it "has compatible interfaces" do
           checker = DuckTyper::BulkInterfaceChecker
-            .new(objects, type:, partial_interface_methods: methods, strict:)
+            .new(objects, namespace:, type:, partial_interface_methods: methods, strict:, name:)
 
           failures = checker.call.reject(&:match?)
 

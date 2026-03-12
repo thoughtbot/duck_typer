@@ -151,6 +151,23 @@ count and kind (required, optional, rest) are compared. In strict
 mode, names must match exactly. Keyword argument names always
 matter regardless of this setting.
 
+To include the interface name in failure messages, use `name:`:
+
+```ruby
+assert_interfaces_match [StripeProcessor, PaypalProcessor],
+  name: "PaymentProcessor"
+```
+
+If your classes are organized under a module, pass it with
+`namespace:` instead of listing them explicitly:
+
+```ruby
+assert_interfaces_match namespace: Payments
+```
+
+DuckTyper will resolve the module's constants and infer the
+interface name from the module name when `name:` is not given.
+
 ### RSpec
 
 Require the RSpec integration in your `spec_helper.rb`:
@@ -198,6 +215,19 @@ expect([StripeProcessor, PaypalProcessor])
   .to have_matching_interfaces(strict: true)
 ```
 
+To include the interface name in failure messages, use `name:`:
+
+```ruby
+expect([StripeProcessor, PaypalProcessor])
+  .to have_matching_interfaces(name: "PaymentProcessor")
+```
+
+To check all classes in a module, pass it as a named subject:
+
+```ruby
+expect(namespace: Payments).to have_matching_interfaces
+```
+
 #### Shared example
 
 If you prefer shared examples, register one in `spec_helper.rb`
@@ -226,13 +256,20 @@ RSpec.describe "payment processors" do
 end
 ```
 
-The same `type:`, `methods:`, and `strict:` options are supported:
+The same `type:`, `methods:`, `strict:`, and `name:` options are
+supported:
 
 ```ruby
 it_behaves_like "an interface", [StripeProcessor, PaypalProcessor],
   type: :class_methods,
   methods: %i[charge refund],
   strict: true
+```
+
+To check all classes in a module, pass it with `namespace:`:
+
+```ruby
+it_behaves_like "an interface", namespace: Payments
 ```
 
 ## Limitations

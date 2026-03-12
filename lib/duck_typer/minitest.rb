@@ -4,9 +4,9 @@ require_relative "../duck_typer"
 
 module DuckTyper
   module Minitest
-    def assert_interfaces_match(objects, type: :instance_methods, methods: nil, strict: false)
+    def assert_interfaces_match(objects = nil, namespace: nil, type: :instance_methods, methods: nil, strict: false, name: nil)
       checker = BulkInterfaceChecker
-        .new(objects, type:, partial_interface_methods: methods, strict:)
+        .new(objects, namespace:, type:, partial_interface_methods: methods, strict:, name:)
 
       checker.call do |result|
         assert result.match?, result.failure_message

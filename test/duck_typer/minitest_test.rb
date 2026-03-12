@@ -32,6 +32,22 @@ class MinitestHelperTest < Minitest::Test
     end
   end
 
+  def test_accepts_namespace
+    namespace = Module.new do
+      const_set :Foo, Class.new { def bar = nil }
+      const_set :Baz, Class.new { def bar = nil }
+    end
+
+    assert_interfaces_match namespace:
+  end
+
+  def test_accepts_name
+    a = Class.new { def bar = nil }
+    b = Class.new { def bar = nil }
+
+    assert_interfaces_match [a, b], name: "Linkable"
+  end
+
   def test_failure_message_includes_method_signatures
     a = Class.new { def foo(a) = nil }
     b = Class.new { def foo(a) = nil }

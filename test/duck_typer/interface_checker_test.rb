@@ -459,6 +459,24 @@ class InterfaceCheckerTest < Minitest::Test
 
   # failure_message output
 
+  def test_failure_message_includes_name_when_provided
+    left = Class.new { def foo(a) = nil }
+    right = Class.new { def foo = nil }
+
+    message = call_checker(left, right, name: "Linkable").failure_message
+
+    assert_includes message, 'compatible "Linkable" interfaces'
+  end
+
+  def test_failure_message_does_not_include_name_when_not_provided
+    left = Class.new { def foo(a) = nil }
+    right = Class.new { def foo = nil }
+
+    message = call_checker(left, right).failure_message
+
+    assert_includes message, "compatible interfaces"
+  end
+
   def test_failure_message_returns_nil_when_interfaces_match
     left = Class.new { def foo = nil }
     right = Class.new { def foo = nil }

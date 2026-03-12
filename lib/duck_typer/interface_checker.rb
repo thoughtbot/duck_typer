@@ -7,10 +7,11 @@ require_relative "params_normalizer"
 module DuckTyper
   # Compares the public method signatures of two classes and reports mismatches.
   class InterfaceChecker
-    def initialize(type: :instance_methods, partial_interface_methods: nil, strict: false)
+    def initialize(type: :instance_methods, partial_interface_methods: nil, strict: false, name: nil)
       @type = type
       @partial_interface_methods = partial_interface_methods
       @strict = strict
+      @name = name
       @inspectors = Hash.new { |h, k| h[k] = MethodInspector.for(k, @type) }
     end
 
@@ -19,7 +20,7 @@ module DuckTyper
       match = -> { diff.empty? }
       diff_message = -> { diff_message(left, right, diff) }
 
-      Result.new(left:, right:, match:, diff_message:)
+      Result.new(left:, right:, match:, diff_message:, name: @name)
     end
 
     private
