@@ -477,6 +477,24 @@ class InterfaceCheckerTest < Minitest::Test
     assert_includes message, "compatible interfaces"
   end
 
+  def test_failure_message_includes_strict_note_when_strict
+    left = Class.new { def foo(x) = nil }
+    right = Class.new { def foo(y) = nil }
+
+    message = call_checker(left, right, strict: true).failure_message
+
+    assert_includes message, "(strict mode: positional argument names must match)"
+  end
+
+  def test_failure_message_does_not_include_strict_note_when_not_strict
+    left = Class.new { def foo(a) = nil }
+    right = Class.new { def foo = nil }
+
+    message = call_checker(left, right).failure_message
+
+    refute_includes message, "strict mode"
+  end
+
   def test_failure_message_returns_nil_when_interfaces_match
     left = Class.new { def foo = nil }
     right = Class.new { def foo = nil }

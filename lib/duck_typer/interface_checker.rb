@@ -20,7 +20,7 @@ module DuckTyper
       match = -> { diff.empty? }
       diff_message = -> { diff_message(left, right, diff) }
 
-      Result.new(left:, right:, match:, diff_message:, name: @name)
+      Result.new(left:, right:, match:, diff_message:, name: @name, strict: @strict)
     end
 
     private
