@@ -1,18 +1,18 @@
-# DuckTyper
+# Duck Typer
 
 [![CI](https://github.com/thoughtbot/duck_typer/actions/workflows/ci.yml/badge.svg)](https://github.com/thoughtbot/duck_typer/actions/workflows/ci.yml)
 
 <div align="center">
-  <img alt="DuckTyper mascot" src="assets/swan_mugshot.png" width="300">
+  <img alt="Duck Typer mascot" src="assets/swan_mugshot.png" width="300">
 </div>
 
 > If it quacks like a duck, it's a duck... or is it?
 
-DuckTyper enforces duck-typed interfaces in Ruby by comparing the
+Duck Typer enforces duck-typed interfaces in Ruby by comparing the
 public method signatures of classes, surfacing mismatches through
 your test suite.
 
-## Why DuckTyper?
+## Why Duck Typer?
 
 Ruby is a duck-typed language. When multiple classes play the same
 role, what matters is not what they _are_, but what they _do_ — the
@@ -25,17 +25,17 @@ from its dynamic nature: abstract base classes that raise
 signatures, or inheritance hierarchies that couple unrelated
 classes. These work, but they're not very Ruby.
 
-DuckTyper takes a different approach. It compares public method
+Duck Typer takes a different approach. It compares public method
 signatures directly and reports mismatches through your test suite —
 the natural place to enforce design constraints in Ruby. There's
 nothing to annotate and nothing to inherit from. The classes remain
-independent; DuckTyper simply verifies that they're speaking the
+independent; Duck Typer simply verifies that they're speaking the
 same language. The interface itself needs no declaration — it is
 the intersection of methods your classes define in common, a living
 document that evolves naturally.
 
 It's also useful during active development. When an interface
-evolves, implementations can easily fall out of sync. DuckTyper
+evolves, implementations can easily fall out of sync. Duck Typer
 catches that immediately and reports clear, precise error messages
 showing exactly which signatures diverged — keeping your classes
 aligned as the design changes.
@@ -56,7 +56,7 @@ bundle install
 
 ## Usage
 
-When interfaces don't match, DuckTyper reports the differing
+When interfaces don't match, Duck Typer reports the differing
 signatures:
 
 ```
@@ -120,7 +120,7 @@ end
 > If you prefer duck typing terminology, `assert_duck_types_match`
 > is available as an alias.
 
-By default, DuckTyper checks instance method interfaces. To check
+By default, Duck Typer checks instance method interfaces. To check
 class-level interfaces instead, pass `type: :class_methods`:
 
 ```ruby
@@ -165,7 +165,7 @@ If your classes are organized under a module, pass it with
 assert_interfaces_match namespace: Payments
 ```
 
-DuckTyper will resolve the module's constants and infer the
+Duck Typer will resolve the module's constants and infer the
 interface name from the module name when `name:` is not given.
 
 ### RSpec
@@ -274,7 +274,7 @@ it_behaves_like "an interface", namespace: Payments
 
 ## Limitations
 
-By default, DuckTyper checks the **structure** of public method
+By default, Duck Typer checks the **structure** of public method
 signatures — the number of parameters, their kinds (required,
 optional, keyword, rest, block), and keyword argument names. In
 strict mode, positional argument names are also compared. It does
@@ -282,7 +282,7 @@ not
 verify the following, which should be covered by your regular
 test suite:
 
-- **Parameter types.** DuckTyper only checks that both methods
+- **Parameter types.** Duck Typer only checks that both methods
   declare an `amount` parameter — not what type of value it
   expects. Two methods with identical signatures may still be
   incompatible if they expect different types.
@@ -290,7 +290,7 @@ test suite:
   but return completely different things.
 - **Behavior.** Matching signatures are a necessary but not
   sufficient condition for duck typing to work correctly at
-  runtime. DuckTyper catches structural drift, not semantic
+  runtime. Duck Typer catches structural drift, not semantic
   divergence.
 
 Some things are intentionally out of scope:
@@ -303,7 +303,7 @@ Some things are intentionally out of scope:
 
 ## Stability
 
-DuckTyper is intentionally minimal. It reflects Ruby's own method
+Duck Typer is intentionally minimal. It reflects Ruby's own method
 introspection API, which rarely changes — so the gem rarely needs
 to either. When it does change, it will most likely be for additive reasons:
 new API options, better error messages, or broader test framework
@@ -332,7 +332,7 @@ Thank you, [contributors]!
 
 ## License
 
-DuckTyper is Copyright (c) thoughtbot, inc.
+Duck Typer is Copyright (c) thoughtbot, inc.
 It is free software, and may be redistributed
 under the terms specified in the [LICENSE] file.
 
