@@ -311,21 +311,21 @@ class InterfaceCheckerTest < Minitest::Test
     left = Class.new { def foo = nil; def bar(a) = nil; def baz = nil }
     right = Class.new { def foo = nil; def bar(a) = nil }
 
-    assert match?(left, right, partial_interface_methods: %i[foo bar])
+    assert match?(left, right, methods: %i[foo bar])
   end
 
   def test_partial_interface_does_not_match_when_specified_method_differs
     left = Class.new { def foo(a) = nil; def bar = nil }
     right = Class.new { def foo = nil; def bar = nil }
 
-    refute match?(left, right, partial_interface_methods: [:foo])
+    refute match?(left, right, methods: [:foo])
   end
 
   def test_partial_interface_ignores_differing_methods_outside_the_list
     left = Class.new { def foo = nil; def bar(a, b) = nil }
     right = Class.new { def foo = nil; def bar = nil }
 
-    assert match?(left, right, partial_interface_methods: [:foo])
+    assert match?(left, right, methods: [:foo])
   end
 
   # Class-level interface
@@ -400,7 +400,7 @@ class InterfaceCheckerTest < Minitest::Test
     right = Class.new { private; def foo = nil }
 
     error = assert_raises(DuckTyper::PrivateMethodError) do
-      call_checker(left, right, partial_interface_methods: [:foo])
+      call_checker(left, right, methods: [:foo])
     end
 
     assert_equal "private method `foo' for #{left}", error.message
@@ -411,7 +411,7 @@ class InterfaceCheckerTest < Minitest::Test
     right = Class.new { private_class_method def self.foo = nil }
 
     error = assert_raises(DuckTyper::PrivateMethodError) do
-      call_checker(left, right, type: :class_methods, partial_interface_methods: [:foo])
+      call_checker(left, right, type: :class_methods, methods: [:foo])
     end
 
     assert_equal "private method `foo' for #{left}", error.message
@@ -422,7 +422,7 @@ class InterfaceCheckerTest < Minitest::Test
     right = Class.new { def self.foo = nil }
 
     error = assert_raises(DuckTyper::MethodNotFoundError) do
-      call_checker(left, right, type: :class_methods, partial_interface_methods: [:foo])
+      call_checker(left, right, type: :class_methods, methods: [:foo])
     end
 
     assert_equal "undefined method `foo' for #{left}", error.message
@@ -433,7 +433,7 @@ class InterfaceCheckerTest < Minitest::Test
     right = Class.new {}
 
     assert_raises(DuckTyper::MethodNotFoundError) do
-      call_checker(left, right, partial_interface_methods: [:foo])
+      call_checker(left, right, methods: [:foo])
     end
   end
 
@@ -442,7 +442,7 @@ class InterfaceCheckerTest < Minitest::Test
     right = Class.new { def foo = nil }
 
     assert_raises(DuckTyper::MethodNotFoundError) do
-      call_checker(left, right, partial_interface_methods: [:foo])
+      call_checker(left, right, methods: [:foo])
     end
   end
 
@@ -451,7 +451,7 @@ class InterfaceCheckerTest < Minitest::Test
     right = Class.new { def foo = nil }
 
     error = assert_raises(DuckTyper::MethodNotFoundError) do
-      call_checker(left, right, partial_interface_methods: [:foo])
+      call_checker(left, right, methods: [:foo])
     end
 
     assert_equal "undefined method `foo' for #{left}", error.message

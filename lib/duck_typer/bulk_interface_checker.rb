@@ -3,7 +3,7 @@
 module DuckTyper
   # Runs interface checks across all consecutive pairs of classes in a list.
   class BulkInterfaceChecker
-    def initialize(objects = nil, namespace: nil, type: :instance_methods, partial_interface_methods: nil, strict: false, name: nil)
+    def initialize(objects = nil, namespace: nil, type: :instance_methods, methods: nil, strict: false, name: nil)
       raise ArgumentError, "cannot specify both objects and namespace" if objects && namespace
       raise ArgumentError, "objects or namespace is required" if objects.nil? && namespace.nil?
 
@@ -11,7 +11,7 @@ module DuckTyper
       raise ArgumentError, "more than one object is required" if @objects.size < 2
 
       name ||= namespace&.name
-      @checker = InterfaceChecker.new(type:, partial_interface_methods:, strict:, name:)
+      @checker = InterfaceChecker.new(type:, methods:, strict:, name:)
     end
 
     def call(&block)

@@ -8,7 +8,7 @@ RSpec::Matchers.define :have_matching_interfaces do |name: nil, type: :instance_
     objects = namespace ? nil : actual
 
     checker = DuckTyper::BulkInterfaceChecker
-      .new(objects, namespace:, type:, partial_interface_methods: methods, strict:, name:)
+      .new(objects, namespace:, type:, methods:, strict:, name:)
 
     @failures = checker.call.reject(&:match?)
     @failures.empty?
@@ -33,7 +33,7 @@ module DuckTyper
         # internal RSpec constant instead of useful context.
         it "has compatible interfaces" do
           checker = DuckTyper::BulkInterfaceChecker
-            .new(objects, namespace:, type:, partial_interface_methods: methods, strict:, name:)
+            .new(objects, namespace:, type:, methods:, strict:, name:)
 
           failures = checker.call.reject(&:match?)
 
