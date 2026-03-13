@@ -32,8 +32,8 @@ module DuckTyper
     def resolve_namespace(namespace)
       namespace
         .constants
-        .map { namespace.const_get(_1) }
-        .select { _1.is_a?(Module) }
+        .map { |const| namespace.const_get(const) }
+        .select { |const| const.is_a?(Module) }
     end
   end
 end
