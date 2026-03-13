@@ -1,5 +1,31 @@
 # Changelog
 
+## [0.5.0] - 2026-03-13
+
+### Added
+- `name:` option: includes the interface name in failure messages
+  (e.g. `compatible "Linkable" interfaces`)
+- `namespace:` option: resolves a module's constants as the list of
+  objects to compare; infers the interface name from the module name
+  when `name:` is not given
+- Strict mode now notes itself in the failure message:
+  `(strict mode: positional argument names must match)`
+- `BulkInterfaceChecker` and `InterfaceChecker` raise
+  `PrivateMethodError` when a private method is specified in
+  `methods:`
+
+### Changed
+- `partial_interface_methods:` renamed to `methods:` across
+  `BulkInterfaceChecker`, `InterfaceChecker`, `assert_interfaces_match`,
+  and `have_matching_interfaces` (breaking change)
+- RSpec matcher now accepts a module as the subject via
+  `expect(namespace: MyModule).to have_matching_interfaces`
+- RSpec shared example now accepts `namespace:` as a keyword argument
+
+### Fixed
+- Numbered block parameters (`_1`) replaced with named ones to avoid
+  `Style/ItBlockParameter` lint failures on Ruby 3.4
+
 ## [0.4.0] - 2026-03-09
 
 ### Added
