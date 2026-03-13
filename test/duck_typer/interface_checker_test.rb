@@ -292,8 +292,8 @@ class InterfaceCheckerTest < Minitest::Test
   end
 
   def test_block_arg_name_does_not_matter
-    left = Class.new { def foo(&) = nil }
-    right = Class.new { def foo(&) = nil }
+    left = Class.new { def foo(&block) = nil }
+    right = Class.new { def foo(&callback) = nil }
 
     assert match?(left, right)
   end
@@ -384,6 +384,13 @@ class InterfaceCheckerTest < Minitest::Test
 
     assert_includes error.message, "instance_methods"
     assert_includes error.message, "class_methods"
+  end
+
+  def test_26_positional_params_does_not_raise
+    left = Class.new { def foo(a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p, q, r, s, t, u, v, w, x, y, z) = nil }
+    right = Class.new { def foo(a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p, q, r, s, t, u, v, w, x, y, z) = nil }
+
+    assert match?(left, right)
   end
 
   def test_more_than_26_positional_params_raises_too_many_parameters_error

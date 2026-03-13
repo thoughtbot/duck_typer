@@ -7,15 +7,13 @@ class BulkInterfaceCheckerTest < Minitest::Test
   end
 
   def test_raises_when_given_one_class
-    assert_raises(ArgumentError) { new_checker([Class.new]) }
+    error = assert_raises(ArgumentError) { new_checker([Class.new]) }
+
+    assert_equal "more than one object is required", error.message
   end
 
   def test_raises_when_given_no_classes
-    assert_raises(ArgumentError) { new_checker([]) }
-  end
-
-  def test_error_message_says_more_than_one_object_is_required
-    error = assert_raises(ArgumentError) { new_checker([Class.new]) }
+    error = assert_raises(ArgumentError) { new_checker([]) }
 
     assert_equal "more than one object is required", error.message
   end
